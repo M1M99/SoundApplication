@@ -59,7 +59,6 @@ namespace SoundApplication.Services.Concrete
             var data = _context.Sounds.FirstOrDefault(s => s.Id == soundId);
             if( data is not null)
             {
-                data.Id = newSound.Id;
                 data.Category = newSound.Category;
                 data.Description = newSound.Description;
                 data.Downloads = newSound.Downloads;

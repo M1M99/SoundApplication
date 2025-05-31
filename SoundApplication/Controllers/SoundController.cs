@@ -42,15 +42,30 @@ namespace SoundApplication.Controllers
             return BadRequest();
         }
         [HttpPut("Edit")]
-        public async Task<ActionResult> Put(string id)
+        public async Task<ActionResult> Put(string id, SoundUpdateDto dto)
         {
-            var data = await _soundService.Update(id);
+            var sound = new Sound
+            {
+                Category = dto.Category,
+                Description = dto.Description,
+                Downloads = dto.Downloads,
+                Id = id,
+                FileType = dto.FileType,
+                FileUrl = dto.FileUrl,
+                IsActive = dto.IsActive,
+                Length = dto.Length,
+                Likes = dto.Likes,
+                PlayCount = dto.PlayCount,
+                PublishDate = dto.PublishDate,
+                SampleRate = dto.SampleRate,
+                Title = dto.Title,
+            };
+            var data = await _soundService.Update(id,sound);
             if (!data.Id.IsNullOrEmpty())
             {
                 return NoContent();
             }
             return BadRequest();
         }
-
     }
 }

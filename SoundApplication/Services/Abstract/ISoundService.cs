@@ -8,7 +8,7 @@ namespace SoundApplication.Services.Abstract
         Task<Sound> GetSoundsById(string soundId);
         Task<bool> SoftDelete(string soundId);
         Task<bool> HardDelete(string soundId);
-        Task<Sound> Update (string soundId);
+        Task<Sound> Update (string soundId, Sound newSound);
         Task<Sound> GetSoundsByAuthorId (string authorId);
     }
 }
