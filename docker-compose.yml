@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  identity.api:
+    build:
+      context: ./Identity.Api
+      dockerfile: Dockerfile
+    ports:
+      - "5219:8080"
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Data Source=sqlserver,1433;Initial Catalog=example;User ID=SA;Password=Password12345!;Encrypt=True;Trust Server Certificate=True
+    networks:
+      - appnetwork
+
+  soundapplication:
+    build:
+      context: ./SoundApplication
+      dockerfile: Dockerfile
+    ports:
+      - "5220:8080"
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Data Source=sqlserver,1433;Initial Catalog=SoundServer1;User ID=SA;Password=Password12345!;Encrypt=True;Trust Server Certificate=True
+    networks:
+      - appnetwork
+       
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: "Password12345!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+    networks:
+      - appnetwork
+
+networks:
+  appnetwork:
+
+volumes:
+  sqlvolume:

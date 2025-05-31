@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.WebHost.UseUrls("https://*:10061");
+//builder.WebHost.UseUrls("https://*:10061");
 builder.Services.AddScoped<ISoundService, SoundService>();
 
 var connection = builder.Configuration.GetConnectionString("Default");

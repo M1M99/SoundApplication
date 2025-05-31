@@ -1,6 +1,5 @@
 ﻿using Identity.Api.Dtos;
 using Identity.Api.Services.Abstract;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Api.Controllers
@@ -34,6 +33,16 @@ namespace Identity.Api.Controllers
                 return BadRequest("Wrong Information");
             }
             return Ok("Successfully Register");
+        }
+
+        [HttpPost("Logout")]
+        public async Task<ActionResult> Logout()
+        {
+            if (await _service.LogoutAsync())
+            {
+                return Ok(new { message = "Successfully logged out" });
+            }
+            return BadRequest(new { message = "Logout failed" });
         }
     }
 }

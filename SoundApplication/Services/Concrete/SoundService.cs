@@ -54,9 +54,30 @@ namespace SoundApplication.Services.Concrete
 
         }
 
-        public Task<Sound> Update(string soundId)
+        public async Task<Sound> Update(string soundId,Sound newSound)
         {
-            throw new NotImplementedException();
+            var data = _context.Sounds.FirstOrDefault(s => s.Id == soundId);
+            if( data is not null)
+            {
+                data.Id = newSound.Id;
+                data.Category = newSound.Category;
+                data.Description = newSound.Description;
+                data.Downloads = newSound.Downloads;
+                data.FileType = newSound.FileType;
+                data.FileUrl = newSound.FileUrl;
+                data.IsActive = newSound.IsActive;
+                data.Length = newSound.Length;
+                data.Likes = newSound.Likes;
+                data.PlayCount = newSound.PlayCount;
+                data.PublishDate = newSound.PublishDate;
+                data.SampleRate = newSound.SampleRate;
+                data.Title = newSound.Title;
+                data.UpdatedAt = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+                return(data);
+            }
+            return (new Sound());
         }
 
         public async Task<bool> HardDelete(string soundId)
