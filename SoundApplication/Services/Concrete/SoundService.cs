@@ -89,5 +89,11 @@ namespace SoundApplication.Services.Concrete
             _context.Sounds.Remove(data);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task AddSound(Sound sound)
+        {
+            await _context.Sounds.AddAsync(sound);
+            await _context.SaveChangesAsync();
+        }
     }
 }

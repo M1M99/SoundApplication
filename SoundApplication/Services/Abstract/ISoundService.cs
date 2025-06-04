@@ -10,5 +10,6 @@ namespace SoundApplication.Services.Abstract
         Task<bool> HardDelete(string soundId);
         Task<Sound> Update (string soundId, Sound newSound);
         Task<Sound> GetSoundsByAuthorId (string authorId);
+        Task AddSound(Sound sound); 
     }
 }

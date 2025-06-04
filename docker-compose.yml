@@ -15,12 +15,29 @@ services:
     networks:
       - appnetwork
 
+  appgateway:
+    build:
+      context: ./ApiGateway
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    depends_on:
+      - soundapplication
+      - identity.api
+    networks:
+      - appnetwork
+
+
+       
   soundapplication:
     build:
       context: ./SoundApplication
       dockerfile: Dockerfile
     ports:
-      - "5220:8080"
+      - "5001:8080"
+    volumes:
+      - ./uploads:/app/wwwroot/uploads
+
     depends_on:
       - sqlserver
     environment:
