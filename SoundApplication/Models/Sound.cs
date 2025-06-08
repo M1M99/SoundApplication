@@ -5,7 +5,7 @@
         public string Id { get; set; }
         public string Title { get; set; }
         public string? Description { get; set; }
-        //public User UserId { get; set; }
+        public string AuthorId { get; set; }
         public decimal Length { get; set; }
         public string Category { get; set; }
         public int SampleRate { get; set; }

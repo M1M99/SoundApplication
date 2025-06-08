@@ -18,7 +18,7 @@ namespace SoundApplication.Services.Concrete
         public async Task<bool> SoftDelete(string soundId)
         {
             var sound = await _context.Sounds.FirstOrDefaultAsync(a => a.Id == soundId);
-            if(sound is null)
+            if (sound is null)
             {
                 throw new KeyNotFoundException($"Sound with id '{soundId}' not found.");
             }
@@ -38,15 +38,16 @@ namespace SoundApplication.Services.Concrete
             return list;
         }
 
-        public Task<Sound> GetSoundsByAuthorId(string authorId)
+        public async Task<List<Sound>> GetSoundsByAuthorId(string authorId)
         {
-            throw new NotImplementedException();
+            var data = await _context.Sounds.Where(s => s.AuthorId == authorId).ToListAsync();
+            return data;
         }
 
         public async Task<Sound> GetSoundsById(string soundId)
         {
             var data = await _context.Sounds.FirstOrDefaultAsync(s => s.Id == soundId);
-            if(data is null)
+            if (data is null)
             {
                 throw new KeyNotFoundException("I Cant Found");
             }
@@ -54,10 +55,10 @@ namespace SoundApplication.Services.Concrete
 
         }
 
-        public async Task<Sound> Update(string soundId,Sound newSound)
+        public async Task<Sound> Update(string soundId, Sound newSound)
         {
             var data = _context.Sounds.FirstOrDefault(s => s.Id == soundId);
-            if( data is not null)
+            if (data is not null)
             {
                 data.Category = newSound.Category;
                 data.Description = newSound.Description;
@@ -74,7 +75,7 @@ namespace SoundApplication.Services.Concrete
                 data.UpdatedAt = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
-                return(data);
+                return (data);
             }
             return (new Sound());
         }
@@ -94,6 +95,21 @@ namespace SoundApplication.Services.Concrete
         {
             await _context.Sounds.AddAsync(sound);
             await _context.SaveChangesAsync();
+        }
+
+        public int GetCountByAuthorId(string authorId)
+        {
+            return _context.Sounds.Where(a => a.AuthorId == authorId).Count();
+        }
+
+        public async Task<string> GetSoundUrlById(string soundId)
+        {
+            var sound = await _context.Sounds.FirstOrDefaultAsync(s => s.Id == soundId);
+            if (sound is not null)
+            {
+                return sound.FileUrl;
+            }
+            return "";
         }
     }
 }

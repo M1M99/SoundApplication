@@ -12,8 +12,8 @@ using SoundApplication.Services.Data;
 namespace SoundApplication.Migrations
 {
     [DbContext(typeof(SoundDbContext))]
-    [Migration("20250531090418_mig")]
-    partial class mig
+    [Migration("20250608093309_mig4")]
+    partial class mig4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,53 @@ namespace SoundApplication.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SoundApplication.Models.PlayList", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PlayLists");
+                });
+
+            modelBuilder.Entity("SoundApplication.Models.PlaylistItem", b =>
+                {
+                    b.Property<string>("PlayListId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SoundId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("PlayListId", "SoundId");
+
+                    b.HasIndex("SoundId");
+
+                    b.ToTable("PlaylistItem");
+                });
+
             modelBuilder.Entity("SoundApplication.Models.Sound", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -76,6 +119,30 @@ namespace SoundApplication.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sounds");
+                });
+
+            modelBuilder.Entity("SoundApplication.Models.PlaylistItem", b =>
+                {
+                    b.HasOne("SoundApplication.Models.PlayList", "PlayList")
+                        .WithMany("Sounds")
+                        .HasForeignKey("PlayListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SoundApplication.Models.Sound", "Sound")
+                        .WithMany()
+                        .HasForeignKey("SoundId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlayList");
+
+                    b.Navigation("Sound");
+                });
+
+            modelBuilder.Entity("SoundApplication.Models.PlayList", b =>
+                {
+                    b.Navigation("Sounds");
                 });
 #pragma warning restore 612, 618
         }

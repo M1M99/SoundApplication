@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoundApplication.Services.Data;
 
@@ -11,9 +12,11 @@ using SoundApplication.Services.Data;
 namespace SoundApplication.Migrations
 {
     [DbContext(typeof(SoundDbContext))]
-    partial class SoundDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250606165401_mig")]
+    partial class mig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,53 +25,10 @@ namespace SoundApplication.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SoundApplication.Models.PlayList", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PlayLists");
-                });
-
-            modelBuilder.Entity("SoundApplication.Models.PlaylistItem", b =>
-                {
-                    b.Property<string>("PlayListId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SoundId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("AddedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("PlayListId", "SoundId");
-
-                    b.HasIndex("SoundId");
-
-                    b.ToTable("PlaylistItem");
-                });
-
             modelBuilder.Entity("SoundApplication.Models.Sound", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -116,30 +76,6 @@ namespace SoundApplication.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sounds");
-                });
-
-            modelBuilder.Entity("SoundApplication.Models.PlaylistItem", b =>
-                {
-                    b.HasOne("SoundApplication.Models.PlayList", "PlayList")
-                        .WithMany("Sounds")
-                        .HasForeignKey("PlayListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SoundApplication.Models.Sound", "Sound")
-                        .WithMany()
-                        .HasForeignKey("SoundId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PlayList");
-
-                    b.Navigation("Sound");
-                });
-
-            modelBuilder.Entity("SoundApplication.Models.PlayList", b =>
-                {
-                    b.Navigation("Sounds");
                 });
 #pragma warning restore 612, 618
         }

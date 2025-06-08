@@ -11,7 +11,7 @@ services:
       - sqlserver
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Default=Data Source=sqlserver,1433;Initial Catalog=example;User ID=SA;Password=Password12345!;Encrypt=True;Trust Server Certificate=True
+      - ConnectionStrings__Default=Data Source=sqlserver,1433;Initial Catalog=Authorization;User ID=SA;Password=Password12345!;Encrypt=True;Trust Server Certificate=True
     networks:
       - appnetwork
 
@@ -36,7 +36,8 @@ services:
     ports:
       - "5001:8080"
     volumes:
-      - ./uploads:/app/wwwroot/uploads
+      - ./soundUrls:/app/soundUrls
+
 
     depends_on:
       - sqlserver

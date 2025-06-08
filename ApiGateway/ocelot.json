@@ -1,34 +1,3 @@
-//{
-//  "Routes": [
-//    {
-//      "DownstreamPathTemplate": "/api/Sound/{id}",
-//      "DownstreamScheme": "https",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "localhost",
-//          "Port": 10601
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/c/{id}",
-//      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
-//    },
-//    {
-//      "DownstreamPathTemplate": "/api/Sound/GetAllSound",
-//      "DownstreamScheme": "https",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "localhost",
-//          "Port": 10601
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/c",
-//      "UpstreamHttpMethod": [ "POST", "GET" ]
-//    }
-//  ],
-//  "GlobalConfiguration": {
-//    "RequestIdKey": "OcRequestId"
-//  }
-//}
 {
   "Routes": [
     {
@@ -104,6 +73,114 @@
       ],
       "UpstreamPathTemplate": "/s/hard/{id}",
       "UpstreamHttpMethod": [ "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Sound/upload",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/upload",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Sound/count/{authorId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/countTrack/{authorId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Sound/GetSoundURL/{soundId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/url/{soundId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Sound/GetSoundsByAuthor/{authorId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/GetByAuthorId/{authorId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Playlist/PlayList/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/PlayList/{userId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Playlist/GetSoundByListId/{listId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/PlayList1/{listId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Playlist/AddNewList",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/CreatePlaylist",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Playlist/DeletePlaylist/{playlistId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/DeletePlaylist/{playlistId}",
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Playlist/AddNewList",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "soundapplication",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/s/AddPlaylist",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ],
   "GlobalConfiguration": {

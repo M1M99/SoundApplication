@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SoundApplication.Dtos;
 using SoundApplication.Models;
 using SoundApplication.Services.Abstract;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace SoundApplication.Controllers
 {
@@ -38,9 +41,19 @@ namespace SoundApplication.Controllers
             return (Ok(await _soundService.GetSoundsById(id)));
         }
 
+        [HttpGet("count/{authorId}")]
+        public ActionResult<int> GetTracksCountByAuthorId(string authorId)
+        {
+            return Ok(_soundService.GetCountByAuthorId(authorId));
+        }
+
+        [Authorize]
         [HttpPost("upload")]
         public async Task<ActionResult> UploadSound(IFormFile file, [FromForm] SoundUploadDto sound)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null) return Unauthorized("User ID not found in token.");
+
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
 
@@ -56,7 +69,7 @@ namespace SoundApplication.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{uniqueFileName}";
+            var url = await _cloundinaryService.UploadFileAsync(file);
 
             var soundToSave = new Sound
             {
@@ -65,19 +78,34 @@ namespace SoundApplication.Controllers
                 Category = sound.Category,
                 Length = sound.Length,
                 SampleRate = sound.SampleRate,
-                FileUrl = fileUrl,
+                FileUrl = url,
                 FileType = sound.FileType,
                 PublishDate = DateTime.UtcNow,
                 Likes = 0,
                 Downloads = 0,
                 PlayCount = 0,
-                IsActive = true
+                IsActive = true,
+                AuthorId = userId
             };
 
             await _soundService.AddSound(soundToSave);
-            await _cloundinaryService.UploadFileAsync(file);
-            return Ok(new { url = file.FileName, soundId = soundToSave.Id });
+            string volumePath = "/app/soundUrls";  
+            string jsonFilePath = Path.Combine(volumePath, "sounds.json");
+
+            List<SoundUrlDto> soundUrls = new List<SoundUrlDto>();
+            if (System.IO.File.Exists(jsonFilePath))
+            {
+                var existingJson = System.IO.File.ReadAllText(jsonFilePath);
+                soundUrls = JsonSerializer.Deserialize<List<SoundUrlDto>>(existingJson) ?? new List<SoundUrlDto>();
+            }
+
+            soundUrls.Add(new SoundUrlDto { Id = soundToSave.Id, Url = url });
+
+            System.IO.File.WriteAllText(jsonFilePath, JsonSerializer.Serialize(soundUrls, new JsonSerializerOptions { WriteIndented = true }));
+
+            return Ok(new { url = url, soundId = soundToSave.Id });
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> SoftDelete(string id)
@@ -126,6 +154,18 @@ namespace SoundApplication.Controllers
                 return NoContent();
             }
             return BadRequest();
+        }
+
+        [HttpGet("GetSoundURL/{soundId}")]
+        public async Task<ActionResult<string>> Get(string soundId)
+        {
+            return await _soundService.GetSoundUrlById(soundId);
+        }
+
+        [HttpGet("GetSoundsByAuthor/{authorId}")]
+        public async Task<ActionResult> GetSound(string authorId)
+        {
+            return Ok(await _soundService.GetSoundsByAuthorId(authorId));
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Api.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20250530060838_mig3")]
-    partial class mig3
+    [Migration("20250606165437_mig")]
+    partial class mig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

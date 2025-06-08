@@ -9,7 +9,9 @@ namespace SoundApplication.Services.Abstract
         Task<bool> SoftDelete(string soundId);
         Task<bool> HardDelete(string soundId);
         Task<Sound> Update (string soundId, Sound newSound);
-        Task<Sound> GetSoundsByAuthorId (string authorId);
+        Task<List<Sound>> GetSoundsByAuthorId (string authorId);
+        int GetCountByAuthorId(string authorId);
         Task AddSound(Sound sound); 
+        Task<string> GetSoundUrlById(string soundId);
     }
 }
